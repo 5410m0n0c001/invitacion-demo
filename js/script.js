@@ -356,7 +356,7 @@ function initQRCode() {
     if (!qrContainer) return;
 
     // PRODUCCIÓN: Cambia esta URL por la URL pública de tu invitación
-    const BASE_URL = 'https://primaveraeventsgroup.com/invitacion/smartlanding.html';
+    const BASE_URL = 'https://5410m0n0c001.github.io/invitacion-demo/smartlanding.html';
     
     // Create the URL
     let qrUrl = new URL(BASE_URL);
