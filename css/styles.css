@@ -15,14 +15,14 @@
 }
 
 /* RESET & BASE ======================================== */
-* {
+html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    max-width: 100%;
 }
 
 body {
@@ -30,8 +30,6 @@ body {
     background-color: var(--bg-color-main);
     color: var(--text-color);
     line-height: 1.6;
-    overflow-x: hidden;
-    position: relative;
 }
 
 h1, h2, h3, h4, .names, .section-title {
@@ -50,9 +48,10 @@ ul {
 
 /* UTILITIES ======================================== */
 .container {
+    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
 }
 
 .text-center { text-align: center; }
@@ -200,13 +199,15 @@ ul {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 50px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     z-index: 1000;
+    width: auto;
+    max-width: 95%;
 }
 
 .floating-nav ul {
@@ -419,8 +420,20 @@ ul {
 /* FOOTER ======================================== */
 .footer-credits {
     font-size: 0.8rem;
-    color: var(--text-light);
+    color: var(--white);
+    opacity: 0.7;
     margin-top: 50px;
+}
+
+.text-muted-light {
+    color: var(--accent-color);
+    opacity: 0.8;
+}
+
+.footer-names h3 {
+    color: var(--white);
+    font-size: 2.2rem;
+    letter-spacing: 2px;
 }
 
 .hero-content {
@@ -451,6 +464,7 @@ ul {
 
     .hero-video-container {
         width: 100%;
+        max-height: 50vh; /* Better proportions on mobile */
     }
 
     .corner-img {
@@ -459,7 +473,21 @@ ul {
     }
 
     .dresscode-icon-img {
-        width: 120px;
+        width: 100px;
+    }
+
+    .floating-nav {
+        padding: 6px 10px;
+    }
+
+    .floating-nav ul {
+        gap: 8px; /* Tighter gap for mobile */
+    }
+
+    .floating-nav a {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
 }
 
