@@ -468,7 +468,8 @@ ul {
     }
 
     .corner-img {
-        width: 120px;
+        width: 70px;
+        opacity: 0.85;
     }
 
     .dresscode-icon-img {
