@@ -19,10 +19,10 @@ html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden;
-    width: 100%;
+    overflow-x: hidden !important; /* Force no horizontal scroll */
+    width: 100vw; /* Exact viewport width */
     position: relative;
-    max-width: 100vw; /* Crucial for overflow */
+    max-width: 100%;
 }
 
 body {
@@ -199,21 +199,21 @@ ul {
     bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 5px 10px;
     border-radius: 50px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    z-index: 2000; /* Higher than balloons */
-    width: auto;
-    max-width: 92vw; /* Ensure it never touches edges */
-    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    z-index: 9999; /* Ensure it's above EVERYTHING */
+    width: fit-content;
+    max-width: 90vw; /* Tighten for small screens */
+    border: 1px solid rgba(85, 107, 47, 0.2);
 }
 
 .floating-nav ul {
     display: flex;
-    gap: 10px;
+    gap: 8px; /* Tighter for mobile by default */
     justify-content: center;
     align-items: center;
 }
@@ -435,14 +435,14 @@ ul {
     letter-spacing: 4px;
     font-weight: 700;
     margin-bottom: 0;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.8); /* Stronger shadow */
+    text-shadow: 0 4px 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.5); /* Extreme shadow */
 }
 
 .text-muted-light {
     color: var(--white);
     opacity: 1;
     font-weight: 600;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 10px rgba(0,0,0,0.9);
 }
 
 .footer-coordination {
@@ -455,72 +455,75 @@ ul {
 }
 
 @media (max-width: 768px) {
-    .names { font-size: 2.8rem; }
+    .names { font-size: 2.2rem; } /* Aggressively smaller */
     
-    .footer-names h3 { font-size: 2.5rem; }
+    .footer-names h3 { font-size: 2.22rem; }
     
     .rsvp-custom-btn {
-        max-width: 80% !important;
+        max-width: 90% !important;
         margin: 0 auto;
     }
 
     .hero-section {
         min-height: auto;
-        padding-top: 20px;
+        padding-top: 40px; /* More space for top rip */
     }
 
     .hero-video-container {
-        width: 100%;
-        height: auto;
-        max-height: 45vh;
+        width: calc(100% - 20px);
+        margin: 0 auto 20px auto;
+        aspect-ratio: 9/16; /* Force vertical look */
+        max-height: 60vh;
         overflow: hidden;
-        border-radius: 15px;
-        margin-bottom: 20px;
+        border-radius: 12px;
+        background: #000;
     }
 
     .hero-video {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Prevents text cutoff in horizontal video */
-        background: #000;
+        object-fit: cover; /* Cover for vertical container */
+        object-position: center;
     }
 
     .corner-img {
-        width: 60px;
-        opacity: 0.8;
+        width: 50px;
+        opacity: 0.7;
     }
 
     .dresscode-icon-img {
-        width: 100px;
+        width: 90px;
     }
 
     .floating-nav {
-        padding: 5px 8px;
-        bottom: 15px;
+        padding: 4px 6px;
+        bottom: 10px;
+        max-width: 94vw;
     }
 
     .floating-nav ul {
-        gap: 6px;
+        gap: 4px;
     }
 
     .floating-nav a {
         width: 32px;
         height: 32px;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
     }
 }
 
-/* Specific fix for ultra-narrow phones */
+/* For ultra-narrow screens like iPhone SE/5 */
 @media (max-width: 360px) {
-    .names { font-size: 2.2rem; }
+    .names { font-size: 1.8rem; }
     .floating-nav a {
-        width: 28px;
-        height: 28px;
-        font-size: 0.85rem;
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
     }
     .floating-nav ul {
-        gap: 4px;
+        gap: 2px;
     }
+    .footer-names h3 { font-size: 1.8rem; }
 }
 
 .date-txt {
