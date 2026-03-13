@@ -782,6 +782,85 @@ ul {
     color: var(--white);
 }
 
+/* PHOTOS SECTION ======================================== */
+.photo-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-camera {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 40px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(85, 107, 47, 0.35);
+    transition: var(--transition);
+}
+
+.btn-camera i {
+    font-size: 1.5rem;
+}
+
+.btn-camera:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(85, 107, 47, 0.45);
+}
+
+.btn-camera:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.upload-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary-color);
+}
+
+.upload-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(85, 107, 47, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spinUpload 0.8s linear infinite;
+}
+
+@keyframes spinUpload {
+    to { transform: rotate(360deg); }
+}
+
+.upload-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    animation: fadeInScale 0.5s ease both;
+}
+
+.upload-success i {
+    font-size: 3rem;
+    color: #25D366;
+}
+
+.upload-success p {
+    font-weight: 500;
+}
+
 /* FOOTER / RSVP ======================================== */
 .rsvp-iframe-container {
     width: 100%;

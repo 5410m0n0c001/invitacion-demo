@@ -137,3 +137,59 @@ function copyToClipboard(text) {
         console.error('Failed to copy: ', err);
     });
 }
+
+// PHOTO UPLOAD TO CLOUDINARY
+const CLOUD_NAME = 'dkozw2kmy';
+const UPLOAD_PRESET = 'unsigned_boda';
+
+const btnCamera = document.getElementById('btn-camera');
+const photoInput = document.getElementById('photo-input');
+const uploadStatus = document.getElementById('upload-status');
+const uploadSuccess = document.getElementById('upload-success');
+
+btnCamera.addEventListener('click', () => {
+    photoInput.click();
+});
+
+photoInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Show spinner, hide button
+    btnCamera.style.display = 'none';
+    uploadStatus.style.display = 'flex';
+    uploadSuccess.style.display = 'none';
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+    formData.append('folder', 'boda-carolina-daniel');
+
+    try {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (res.ok) {
+            // Upload success
+            uploadStatus.style.display = 'none';
+            uploadSuccess.style.display = 'flex';
+
+            // Reset after 3 seconds to allow another upload
+            setTimeout(() => {
+                uploadSuccess.style.display = 'none';
+                btnCamera.style.display = 'flex';
+                photoInput.value = '';
+            }, 3000);
+        } else {
+            throw new Error('Upload failed');
+        }
+    } catch (err) {
+        console.error('Upload error:', err);
+        uploadStatus.style.display = 'none';
+        btnCamera.style.display = 'flex';
+        photoInput.value = '';
+        alert('Error al subir la foto. Intenta de nuevo.');
+    }
+});
