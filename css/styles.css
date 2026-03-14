@@ -357,13 +357,8 @@ ul {
 }
 
 /* Typing Effect styles */
-.typing-container {
-    display: inline-block;
-    position: relative;
-    border-right: 3px solid var(--primary-color);
-    white-space: pre-wrap;
-    overflow: hidden;
-    visibility: hidden; /* Start hidden for typeEffect to work */
+.typing-container.active {
+    visibility: visible; /* Show when reveal observer triggers */
 }
 
 .typing-cursor-blink {
@@ -479,11 +474,10 @@ ul {
 
 .hero-video-container {
     width: 100% !important;
-    height: 100vh !important;
+    height: 100% !important;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     overflow: hidden;
     z-index: 1;
     border-radius: 0 !important;
@@ -517,10 +511,9 @@ ul {
 /* Desktop refinements */
 @media (min-width: 992px) {
     .hero-content {
-        transform: scale(1.1);
-        padding: 40px 60px;
-        max-width: 800px;
-        background: rgba(255, 255, 255, 0.7);
+        padding: 40px 50px;
+        max-width: 650px; /* Reduced for elegance */
+        background: rgba(255, 255, 255, 0.65);
     }
 }
 
@@ -642,7 +635,7 @@ ul {
 /* Desktop reduction for rsvp */
 @media (min-width: 992px) {
     .rsvp-img-btn {
-        max-width: 220px !important;
+        max-width: 180px !important; /* Even more elegant */
     }
 }
 
