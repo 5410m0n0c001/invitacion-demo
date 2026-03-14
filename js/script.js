@@ -234,7 +234,7 @@ function copyToClipboard(text) {
 // SHARING & CALENDAR INTEGRATION
 const calendarBtn = document.getElementById('calendar-btn');
 const calendarOptions = document.getElementById('calendar-options');
-const shareBtn = document.getElementById('share-btn');
+const shareBtn = document.getElementById('share-btn-nav');
 
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
