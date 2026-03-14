@@ -280,12 +280,13 @@ ul {
 .audio-btn { top: 20px; }
 .share-btn-sticky { 
     top: auto; 
-    bottom: 80px; /* Positioned above the naval bar, but sticky on the right */
+    bottom: 90px; /* Elevated slightly more for visibility */
     right: 20px;
-    background: transparent !important; /* No background as requested */
+    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0;
+    z-index: 9995; /* Just below floating-nav but above content */
 }
 
 .audio-btn i {
@@ -296,11 +297,18 @@ ul {
 }
 
 .share-icon-img {
-    width: 100px; /* Even larger for Wow factor and touchability on mobile */
-    height: 100px;
+    width: 110px; /* Even BIGGER for wow factor */
+    height: 110px;
     object-fit: contain;
-    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4));
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5));
     transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .share-icon-img {
+        width: 125px; /* Huge on mobile for primary interaction */
+        height: 125px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -332,7 +340,7 @@ ul {
     visibility: visible !important;
     opacity: 1 !important;
     display: block !important;
-    z-index: 5;
+    z-index: 1000 !important;
     position: relative;
     font-size: 1.8rem !important;
 }
@@ -489,23 +497,30 @@ ul {
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center top !important; /* Force priority to head area */
+    object-position: center; /* Better for generic mobilePortraits */
     transition: opacity 1.5s ease;
     border-radius: 0 !important;
 }
 
+@media (max-width: 768px) {
+    .hero-video {
+        width: 100%;
+        height: 110%; /* Slightly taller to ensure overflow cover */
+    }
+}
+
 .hero-content {
-    background: rgba(255, 255, 255, 0.45); /* Lighter for mobile glass */
-    backdrop-filter: blur(15px); /* Stronger blur for "laminado" effect */
-    -webkit-backdrop-filter: blur(15px);
-    padding: 25px 20px;
-    border-radius: 30px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.4); 
+    backdrop-filter: blur(18px); /* Even stronger blur */
+    -webkit-backdrop-filter: blur(18px);
+    padding: 30px 25px;
+    border-radius: 35px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.2);
     z-index: 10;
-    width: 85%;
-    max-width: 500px;
-    margin: 10px;
-    border: 1px solid rgba(255,255,255,0.3);
+    width: 90%;
+    max-width: 550px;
+    margin: 15px;
+    border: 1px solid rgba(255,255,255,0.5);
     text-align: center;
 }
 
@@ -1550,7 +1565,7 @@ section {
     width: 100%;
     height: 100%;
     pointer-events: none !important;
-    z-index: 9000 !important; /* Pass BEHIND floating-nav (9999) */
+    z-index: 500 !important; /* Extremely low to be behind nav (9999) and buttons */
     overflow: hidden;
     display: none;
 }
