@@ -70,18 +70,6 @@ const revealCallback = (entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            
-            // Optimized staggering: only for top-level containers
-            // and using requestAnimationFrame to avoid blocking the main thread
-            const subElements = entry.target.querySelectorAll('.reveal, .text-reveal, .scale-pulse, .card-flip-up, .venue-card, .gift-card');
-            if (subElements.length > 0) {
-                subElements.forEach((el, index) => {
-                    setTimeout(() => {
-                        requestAnimationFrame(() => el.classList.add('active'));
-                    }, index * 100);
-                });
-            }
-
             observer.unobserve(entry.target);
         }
     });

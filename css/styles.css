@@ -515,18 +515,6 @@ ul {
     }
 }
 
-    /* SPECIFIC MOBILE FIXES FOR QR AND VISOR */
-    .qr-container-wrapper {
-        max-width: 180px; /* Reduced specific for mobile QR */
-        padding: 15px;
-    }
-
-    .photo-gallery-latest {
-        max-width: 100%; /* Fully dynamic visor on mobile */
-        width: calc(100% - 30px);
-    }
-}
-
 /* For ultra-narrow screens like iPhone SE/5 */
 @media (max-width: 360px) {
     .names { font-size: 1.8rem; }
@@ -1291,7 +1279,8 @@ ul {
 .reveal {
     opacity: 0;
     transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
 }
 
 .reveal.active {
