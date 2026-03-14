@@ -71,11 +71,14 @@ const revealCallback = (entries, observer) => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
             
-            // Re-enable staggering for internal elements
-            const subElements = entry.target.querySelectorAll('.reveal, .text-reveal, .scale-pulse, .card-flip-up, .venue-card, .gift-card, .padrino-item, .color-swatch');
+            // Optimized staggering: only for top-level containers
+            // and using requestAnimationFrame to avoid blocking the main thread
+            const subElements = entry.target.querySelectorAll('.reveal, .text-reveal, .scale-pulse, .card-flip-up, .venue-card, .gift-card');
             if (subElements.length > 0) {
                 subElements.forEach((el, index) => {
-                    setTimeout(() => el.classList.add('active'), index * 150);
+                    setTimeout(() => {
+                        requestAnimationFrame(() => el.classList.add('active'));
+                    }, index * 100);
                 });
             }
 
@@ -172,11 +175,14 @@ const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const current = entry.target.getAttribute('id');
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
+            // Debounced update to avoid layout flickering
+            requestAnimationFrame(() => {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
             });
         }
     });
