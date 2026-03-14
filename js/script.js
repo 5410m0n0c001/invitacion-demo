@@ -210,22 +210,23 @@ if (audioBtn && bgMusic) {
         const iconElement = audioBtn.querySelector('i');
         
         if (bgMusic.paused) {
+            // First, update the UI to show and "attempt" to play
+            audioBtn.classList.add('playing');
+            if (iconElement) iconElement.className = 'bx bx-volume-high';
+            
             bgMusic.play().then(() => {
-                audioBtn.classList.add('playing');
-                if (iconElement) {
-                    iconElement.className = 'bx bx-volume-high'; 
-                    iconElement.style.color = 'white';
-                }
+                console.log("Music started successfully");
                 audioBtn.setAttribute('aria-label', "Pausar música");
-            }).catch(err => console.error("Play error:", err));
+            }).catch(err => {
+                console.warn("Audio blocked by browser, but UI updated:", err);
+                // Keep the 'playing' class so the user knows they "turned it on"
+            });
         } else {
             bgMusic.pause();
             audioBtn.classList.remove('playing');
-            if (iconElement) {
-                iconElement.className = 'bx bx-volume-mute';
-                iconElement.style.color = 'var(--primary-color)';
-            }
+            if (iconElement) iconElement.className = 'bx bx-volume-mute';
             audioBtn.setAttribute('aria-label', "Reproducir música");
+            console.log("Music paused");
         }
     });
 }
