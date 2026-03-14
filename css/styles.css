@@ -851,6 +851,10 @@ ul {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
+    justify-content: center; /* Force grid items to center if they don't fill */
+    max-width: 900px; /* Tighter container for better visual balance */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .event-card {

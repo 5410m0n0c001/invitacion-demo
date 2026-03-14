@@ -152,7 +152,7 @@ function triggerCelebration() {
 }
 
 function spawnBalloons() {
-    // Strictly 3 balloons for a clean, premium look, moving ONLY UP
+    // Strictly 3 balloons for a clean, premium look, moving ONLY UPward
     balloonsContainer.innerHTML = '';
     for (let i = 0; i < 3; i++) {
         setTimeout(() => {
@@ -160,7 +160,7 @@ function spawnBalloons() {
             balloon.src = 'globos.png';
             balloon.className = 'balloon-img';
             balloonsContainer.appendChild(balloon);
-        }, i * 2500); // Staggered start
+        }, i * 3000); // 3-second stagger for a majestic ascending loop
     }
 }
 
