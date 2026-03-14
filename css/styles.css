@@ -296,10 +296,10 @@ ul {
 }
 
 .share-icon-img {
-    width: 60px; /* Larger as it's the main button now */
-    height: 60px;
+    width: 80px; /* Increased size for mobile UX */
+    height: 80px;
     object-fit: contain;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4));
     transition: transform 0.3s ease;
 }
 
@@ -320,8 +320,11 @@ ul {
     animation: pulseLoop 4s infinite;
 }
 
-.audio-btn.playing i {
+.audio-btn.playing i, .audio-btn i {
     color: var(--white) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
 }
 
 /* Share button inside nav */
@@ -479,16 +482,27 @@ ul {
     border-radius: 0 !important;
 }
 
-/* Desktop CINEMA mode */
+.hero-content {
+    background: rgba(255, 255, 255, 0.65); /* Glass effect for all screens */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 30px 25px;
+    border-radius: 30px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+    z-index: 10;
+    width: 90%;
+    max-width: 600px;
+    margin: 20px;
+    border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* Desktop CINEMA mode refinements */
 @media (min-width: 992px) {
     .hero-content {
         transform: scale(1.1);
-        background: rgba(255, 255, 255, 0.7); /* More contrast */
-        backdrop-filter: blur(12px);
         padding: 40px 60px;
-        border-radius: 40px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        z-index: 10;
+        max-width: 800px;
+        background: rgba(255, 255, 255, 0.75);
     }
 }
 
