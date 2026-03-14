@@ -190,10 +190,26 @@ const countdown = setInterval(() => {
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.floating-nav ul li a');
 
-// Observe children of reveal containers that might have typing
-document.querySelectorAll('.typing-container').forEach(el => {
-    revealObserver.observe(el);
-});
+const sectionOptions = {
+    threshold: 0.4,
+    rootMargin: "0px"
+};
+
+const sectionCallback = (entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${id}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+};
+
+const sectionObserver = new IntersectionObserver(sectionCallback, sectionOptions);
 
 sections.forEach(section => {
     sectionObserver.observe(section);
