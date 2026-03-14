@@ -208,7 +208,7 @@ if (audioBtn && bgMusic) {
             bgMusic.play().then(() => {
                 audioBtn.classList.add('playing');
                 if (icon) {
-                    icon.className = 'bx bx-volume-high'; // High fidelity icon
+                    icon.className = 'bx bx-volume-high'; // Explicit waves
                     icon.style.color = 'white';
                 }
             }).catch(e => console.log("Can't play audio:", e));
@@ -216,7 +216,7 @@ if (audioBtn && bgMusic) {
             bgMusic.pause();
             audioBtn.classList.remove('playing');
             if (icon) {
-                icon.className = 'bx bx-volume-mute';
+                icon.className = 'bx bx-volume-mute'; // Explicit mute
                 icon.style.color = 'var(--primary-color)';
             }
         }
