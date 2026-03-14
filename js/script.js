@@ -41,7 +41,7 @@ const handleEnvelopeClick = () => {
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
                     if (icon) {
-                        icon.className = 'bx bx-volume-high'; // Show active waves
+                        icon.className = 'bx bx-volume-high'; // Show waves
                         icon.style.color = 'white';
                     }
                 }).catch(e => console.log('Audio autoplay blocked:', e));
@@ -127,7 +127,11 @@ const balloonsContainer = document.getElementById('balloons-container');
 let soundPlayCount = 0;
 const maxSoundPlays = 4;
 
+let isCelebrating = false;
 function triggerCelebration() {
+    if (isCelebrating) return;
+    isCelebrating = true;
+    
     if (celebrationSound && soundPlayCount < maxSoundPlays) {
         celebrationSound.play()
             .then(() => {
@@ -150,16 +154,15 @@ function triggerCelebration() {
 }
 
 function spawnBalloons() {
-    for (let i = 0; i < 8; i++) {
+    // Strictly 3 balloons for a clean, premium look
+    balloonsContainer.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
         setTimeout(() => {
             const balloon = document.createElement('img');
             balloon.src = 'globos.png';
             balloon.className = 'balloon-img';
-            balloon.style.left = Math.random() * 80 + '%';
-            balloon.style.animationDelay = (Math.random() * 8) + 's';
-            balloon.style.width = (180 + Math.random() * 120) + 'px';
             balloonsContainer.appendChild(balloon);
-        }, i * 600);
+        }, i * 2000);
     }
 }
 
@@ -204,21 +207,25 @@ if (audioBtn && bgMusic) {
     audioBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        const iconElement = audioBtn.querySelector('i');
+        
         if (bgMusic.paused) {
             bgMusic.play().then(() => {
                 audioBtn.classList.add('playing');
-                if (icon) {
-                    icon.className = 'bx bx-volume-high'; // Explicit waves
-                    icon.style.color = 'white';
+                if (iconElement) {
+                    iconElement.className = 'bx bx-volume-high';
+                    iconElement.style.color = 'white';
                 }
-            }).catch(e => console.log("Can't play audio:", e));
+                audioBtn.setAttribute('aria-label', "Pausar música");
+            }).catch(err => console.error("Play error:", err));
         } else {
             bgMusic.pause();
             audioBtn.classList.remove('playing');
-            if (icon) {
-                icon.className = 'bx bx-volume-mute'; // Explicit mute
-                icon.style.color = 'var(--primary-color)';
+            if (iconElement) {
+                iconElement.className = 'bx bx-volume-mute';
+                iconElement.style.color = 'var(--primary-color)';
             }
+            audioBtn.setAttribute('aria-label', "Reproducir música");
         }
     });
 }
@@ -234,7 +241,7 @@ function copyToClipboard(text) {
 // SHARING & CALENDAR INTEGRATION
 const calendarBtn = document.getElementById('calendar-btn');
 const calendarOptions = document.getElementById('calendar-options');
-const shareBtn = document.getElementById('share-btn-nav');
+const shareBtn = document.getElementById('share-btn-sticky');
 
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
@@ -345,20 +352,43 @@ function renderCloudinaryGallery(resources) {
     resources.sort((a, b) => b.version - a.version);
     let html = '';
     const latest = resources[0];
-    const latestUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_800,q_auto,f_auto/v${latest.version}/${latest.public_id}.${latest.format}`;
-    html += '<div class="photo-gallery-latest"><span class="photo-badge">Recién subida</span><img src="' + latestUrl + '" alt="Última foto"></div>';
+    const latestUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1200,q_auto,f_auto/v${latest.version}/${latest.public_id}.${latest.format}`;
+    html += '<div class="photo-gallery-latest reveal"><span class="photo-badge">Recién subida</span><img src="' + latestUrl + '" alt="Última foto" onclick="openVisor(\'' + latestUrl + '\')"></div>';
     if (resources.length > 1) {
-        html += '<div class="photo-gallery-grid">';
-        var limit = Math.min(resources.length, 9);
+        html += '<div class="photo-gallery-grid reveal">';
+        var limit = Math.min(resources.length, 12);
         for (var i = 1; i < limit; i++) {
             const r = resources[i];
-            const thumbUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_200,h_200,c_fill,q_auto,f_auto/v${r.version}/${r.public_id}.${r.format}`;
-            html += '<img src="' + thumbUrl + '" alt="Foto compartida">';
+            const fullUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1200,q_auto,f_auto/v${r.version}/${r.public_id}.${r.format}`;
+            const thumbUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_300,h_300,c_fill,q_auto,f_auto/v${r.version}/${r.public_id}.${r.format}`;
+            html += '<img src="' + thumbUrl + '" alt="Foto compartida" onclick="openVisor(\'' + fullUrl + '\')">';
         }
         html += '</div>';
     }
     photoGallery.innerHTML = html;
 }
+
+// ALBUM VISOR LOGIC
+const albumVisor = document.getElementById('album-visor');
+const visorImg = document.getElementById('visor-img');
+const visorClose = document.getElementById('visor-close');
+
+function openVisor(url) {
+    if (albumVisor && visorImg) {
+        visorImg.src = url;
+        albumVisor.style.display = "block";
+    }
+}
+
+if (visorClose) {
+    visorClose.onclick = () => albumVisor.style.display = "none";
+}
+
+window.onclick = (event) => {
+    if (event.target == albumVisor) {
+        albumVisor.style.display = "none";
+    }
+};
 
 fetchCloudinaryGallery();
 
