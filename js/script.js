@@ -39,23 +39,219 @@ const handleEnvelopeClick = () => {
             // Start bg music
             const bgMusic = document.getElementById('bg-music');
             const audioBtn = document.getElementById('audio-btn');
+            const bgMusicVideo = document.getElementById('audio-btn-video');
             if (bgMusic && audioBtn) {
-                const icon = audioBtn.querySelector('i');
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
-                    if (icon) {
-                        icon.className = 'bx bx-volume-full'; // Standard full icon
-                    }
+                    if (bgMusicVideo) bgMusicVideo.play();
                 }).catch(e => console.log('Audio autoplay blocked:', e));
             }
 
             // Remove from DOM after fade
             setTimeout(() => {
                 envelopeScreen.style.display = 'none';
+                
+                // Start Guided Tour after card is visible
+                startGuidedTour();
             }, 1600);
         };
     }
 };
+
+// GUIDED TOUR LOGIC (Driver.js)
+function startGuidedTour() {
+    // Check if Driver.js is loaded
+    if (!window.driver || !window.driver.js) return;
+    
+    const driver = window.driver.js.driver;
+    
+    // Check if tour was already shown (optional, usually you only want to show it once per user)
+    // if (localStorage.getItem('tourCompleted') === 'true') return;
+
+    const driverObj = driver({
+        showProgress: true,
+        nextBtnText: 'Siguiente ➔',
+        prevBtnText: '⬅ Anterior',
+        doneBtnText: '¡Comenzar!',
+        allowClose: true,
+        animate: true,
+        popoverClass: 'custom-driver-popover',
+        steps: [
+            {
+                popover: {
+                    title: '¡Hola y Bienvenidos!',
+                    description: 'Esta invitación es interactiva. Te guiaremos rápidamente para que no te pierdas ningún detalle de nuestro gran día. <br><br><i>Puedes saltar este paso en cualquier momento tocando la "X" o "¡Comenzar!".</i>',
+                    side: "center",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#hero',
+                popover: {
+                    title: 'Portada',
+                    description: 'Esta es la parte donde viene la información: los nombres de los novios, la fecha, y con el espacio para personalizar con el contenido que desees (foto, video, etc.).',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.floating-nav',
+                popover: {
+                    title: 'Navegación Rápida',
+                    description: '<b>Toca aquí</b> en cualquier momento para saltar directamente a la sección que te interese (Ubicación, Regalos, Fotos, etc.) sin tener que deslizar.',
+                    side: "left",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#audio-btn',
+                popover: {
+                    title: 'Música de Fondo',
+                    description: '<b>Toca aquí</b> si deseas pausar o reanudar la música que preparamos para ti.',
+                    side: "left",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#share-btn-sticky',
+                popover: {
+                    title: 'Compartir',
+                    description: '<b>Toca aquí</b> para compartir esta invitación con tus familiares o amigos fácilmente por WhatsApp u otros medios.',
+                    side: "left",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.countdown-container',
+                popover: {
+                    title: 'Contador Regresivo',
+                    description: 'Marca el tiempo que falta para que llegue el gran momento. Además, como se muestra en esta demostración, falta sólo 1 minuto en la demostración. Al término de la demostración notarás que existe una alerta animada que indicará que es el gran día, como fuegos artificiales y globos.',
+                    side: "left",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#calendar-btn',
+                popover: {
+                    title: 'Agendar Día',
+                    description: '<b>Toca este botón</b> para añadir el evento automáticamente a tu calendario y así no olvides acompañarnos.',
+                    side: "right",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#ubicacion',
+                popover: {
+                    title: 'Dónde y Cuándo',
+                    description: '¡No te pierdas de nada! <b>Toca los botones de mapas</b> para abrir la ruta exacta hacia la ceremonia y recepción.',
+                    side: "top",
+                    align: 'start'
+                }
+            },
+            {
+                element: 'a[href="mapa.html"]',
+                popover: {
+                    title: 'Ubica tu Mesa',
+                    description: 'Este botón te llevará a un modelo 3D de la locación que te permitirá ubicar tu mesa y cada área destinada para cada momento.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#codigo-vestimenta',
+                popover: {
+                    title: 'Código de Vestimenta',
+                    description: 'Aquí te sugerimos la paleta de colores. Te agradecemos seguirla para que la armonía del evento sea perfecta.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#padrinos',
+                popover: {
+                    title: 'Padrinos',
+                    description: 'Donde van a poder dar las gracias a los patrocinadores de tu evento o a los padrinos por acompañarlos.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#mesa-regalos',
+                popover: {
+                    title: 'Mesa de Regalos',
+                    description: 'Si gustas tener un detalle, aquí encuentras opciones. <b>Toca el botón "Copiar N° Cuenta"</b>, o los logos de las tiendas departamentales.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#fotos',
+                popover: {
+                    title: 'Comparte tu Foto',
+                    description: 'Este álbum es dinámico. Las fotos que se tomen en el evento se mostrarán automáticamente tanto en la invitación como en una pantalla el día del evento, así todos podrán compartir en el momento los highlights más importantes de esta celebración.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#btn-share-qr',
+                popover: {
+                    title: 'Compartir QR',
+                    description: 'Al presionarlo el usuario puede compartir el código QR con todos los invitados (o los que guste) para que puedan colaborar subiendo sus fotos y haciendo más dinámica y divertida esta noche.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#rsvp',
+                popover: {
+                    title: 'Por Favor, Confirma tu Asistencia',
+                    description: 'El paso más importante: <b>Haz clic en el botón de confirmación</b> para asegurar tu lugar. ¡Esperamos contar contigo!',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                popover: {
+                    title: 'Aún hay más secciones y posibilidades',
+                    description: '¿Qué hay más secciones que se pueden agregar? Como un sketchup completo del evento en un timeline lineal, fotografías, vídeos o material que los festejados gustan compartir. El diseño es personalizado donde el usuario puede elegir colores, diseño, y agregar alguna funcionalidad que desee.',
+                    side: "center",
+                    align: 'center'
+                }
+            },
+            {
+                popover: {
+                    title: 'Invitación Física Opcional',
+                    description: 'También se puede agregar una tarjeta de Invitación Física con tecnología NFC dentro de un hermoso sobre como recuerdo. Opcionalmente, entregar a cada invitado un sobre igual de los anfitriones con una tarjeta personalizada.',
+                    side: "center",
+                    align: 'center'
+                }
+            },
+            {
+                popover: {
+                    title: '¡Grandes Noticias!',
+                    description: 'Esta invitación <b>no tiene fecha de caducidad</b>, permanecerá en línea por tiempo indefinido sin que tengas que pagar almacenamiento extra con un álbum digital donde se guardan todas las fotos que tus invitados subieron.',
+                    side: "center",
+                    align: 'center'
+                }
+            }
+        ],
+        onDestroyStarted: () => {
+            // Se usa setTimeout para evitar bloqueos si Driver.js está procesando
+            setTimeout(() => {
+                if (!driverObj.hasNextStep() || confirm("¿Estás listo para explorar la invitación por ti mismo?")) {
+                    driverObj.destroy();
+                    // localStorage.setItem('tourCompleted', 'true');
+                }
+            }, 0);
+        },
+    });
+
+    // Pequeño retardo para asegurar que la UI se pintó completamente
+    setTimeout(() => {
+        driverObj.drive();
+    }, 500);
+}
 
 if (envelopeScreen) {
     envelopeScreen.addEventListener('click', handleEnvelopeClick);
@@ -225,26 +421,26 @@ sections.forEach(section => {
 // AUDIO PLAYER
 const audioBtn = document.getElementById('audio-btn');
 const bgMusic = document.getElementById('bg-music');
+const bgMusicVideo = document.getElementById('audio-btn-video');
 
 if (audioBtn && bgMusic) {
     audioBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const iconElement = audioBtn.querySelector('i');
         
         if (bgMusic.paused) {
             bgMusic.play().then(() => {
                 audioBtn.classList.add('playing');
-                if (iconElement) iconElement.className = 'bx bx-volume-full';
+                if (bgMusicVideo) bgMusicVideo.play();
                 audioBtn.setAttribute('aria-label', "Pausar música");
             }).catch(err => {
                 console.warn("Audio blocked:", err);
                 audioBtn.classList.add('playing');
-                if (iconElement) iconElement.className = 'bx bx-volume-full';
+                if (bgMusicVideo) bgMusicVideo.play();
             });
         } else {
             bgMusic.pause();
             audioBtn.classList.remove('playing');
-            if (iconElement) iconElement.className = 'bx bx-volume-mute';
+            if (bgMusicVideo) bgMusicVideo.pause();
             audioBtn.setAttribute('aria-label', "Reproducir música");
         }
     });

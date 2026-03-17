@@ -16,6 +16,9 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
     
+    <!-- Driver.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    
     <!-- Meta tags SEO / Compartir -->
     <meta property="og:title" content="¡Estás Invitado a Nuestra Boda!">
     <meta property="og:description" content="Acompáñanos a celebrar nuestro gran día.">
@@ -55,7 +58,7 @@
 
     <!-- Reproductor de Audio -->
     <button class="audio-btn" id="audio-btn" aria-label="Reproducir música">
-        <i class='bx bx-volume-full'></i>
+        <video id="audio-btn-video" src="music2.mp4" muted loop playsinline></video>
     </button>
     
     <!-- Botón Compartir Sticky -->
@@ -358,6 +361,10 @@
     
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- Driver.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    
     <!-- JS Scripts -->
     <script src="js/script.js"></script>
 </body>
