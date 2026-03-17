@@ -277,7 +277,23 @@ ul {
     border: 2px solid var(--primary-color);
 }
 
-.audio-btn { top: 20px; }
+.audio-btn { 
+    top: 20px; 
+    width: 195px; /* Adjust to oval shape - was 65px */
+    height: 126px; /* was 42px */
+    border-radius: 75px; /* Makes it pill shaped/oval - was 25px */
+    padding: 0;
+    overflow: hidden; /* Clips the video inside */
+    background-color: #000; /* Dark background under video */
+}
+
+#audio-btn-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
 .share-btn-sticky { 
     top: auto; 
     bottom: 90px; /* Elevated slightly more for visibility */
@@ -287,13 +303,6 @@ ul {
     box-shadow: none !important;
     padding: 0;
     z-index: 9995; /* Just below floating-nav but above content */
-}
-
-.audio-btn i {
-    font-size: 1.6rem !important;
-    color: var(--primary-color) !important;
-    display: block !important;
-    visibility: visible !important;
 }
 
 .share-icon-img {
@@ -333,16 +342,6 @@ ul {
 .audio-btn.playing {
     background-color: var(--primary-color);
     animation: pulseLoop 4s infinite;
-}
-
-.audio-btn.playing i, .audio-btn i {
-    color: var(--white) !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    display: block !important;
-    z-index: 1000 !important;
-    position: relative;
-    font-size: 1.8rem !important;
 }
 
 /* Share button inside nav */
@@ -1670,4 +1669,76 @@ section {
     mix-blend-mode: multiply !important;
     max-width: 100%;
     height: auto;
+}
+
+/* CUSTOM DRIVER.JS TOUR STYLES */
+.custom-driver-popover {
+    border-radius: 15px !important;
+    padding: 20px !important;
+    font-family: var(--font-body) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+    border: 1px solid rgba(85, 107, 47, 0.2) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+}
+
+.custom-driver-popover .driver-popover-title {
+    font-family: var(--font-head) !important;
+    color: var(--primary-color) !important;
+    font-size: 1.4rem !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+}
+
+.custom-driver-popover .driver-popover-description {
+    color: var(--text-color) !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+.custom-driver-popover .driver-popover-footer button {
+    font-family: var(--font-body) !important;
+    border-radius: 20px !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    padding: 8px 15px !important;
+    transition: var(--transition) !important;
+}
+
+.custom-driver-popover .driver-popover-next-btn, 
+.custom-driver-popover .driver-popover-done-btn {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.custom-driver-popover .driver-popover-next-btn:hover, 
+.custom-driver-popover .driver-popover-done-btn:hover {
+    background-color: var(--text-color) !important;
+    transform: translateY(-2px);
+}
+
+.custom-driver-popover .driver-popover-prev-btn {
+    color: var(--primary-color) !important;
+    background: transparent !important;
+    border: 1px solid var(--primary-color) !important;
+    text-shadow: none !important;
+}
+
+.custom-driver-popover .driver-popover-prev-btn:hover {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.driver-popover-close-btn {
+    color: var(--text-color) !important;
+    font-size: 1.2rem !important;
+    transition: var(--transition);
+}
+
+.driver-popover-close-btn:hover {
+    color: var(--primary-color) !important;
+    transform: scale(1.1);
 }
