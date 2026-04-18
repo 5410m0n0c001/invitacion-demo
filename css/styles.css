@@ -484,6 +484,7 @@ ul {
 
 /* HERO SECTION ======================================== */
 .hero-section {
+    height: 100vh;           /* Fijo — no se achica ni se alarga */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -498,21 +499,18 @@ ul {
 
 @media (max-width: 768px) {
     .hero-section {
-        min-height: 100vh !important; /* Force full screen height on mobile */
+        height: 100svh;       /* svh = safe viewport height — evita el recorte en móvil */
+        min-height: 100svh;
     }
 }
 
 .hero-video-container {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100vw;
-    min-height: 100vh;
+    inset: 0;                /* top/right/bottom/left: 0 — método más robusto */
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     z-index: 1;
-    border-radius: 0 !important;
 }
 
 .hero-video {
@@ -520,8 +518,7 @@ ul {
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center;
-    transition: opacity 1.5s ease;
+    object-position: center center;
     border-radius: 0 !important;
 }
 
@@ -618,8 +615,8 @@ ul {
     50% { transform: translate(-3px, -3px) scale(1.02) scaleX(-1); }
 }
 
-/* Torn paper effect placeholders (using SVG backgrounds generally, but using borders for simplicity first) */
-.paper-texture-top, .paper-texture-bottom, .paper-rip-top, .paper-rip-bottom {
+/* Torn paper effect — ONLY paper-rip variants get the scalloped gradient */
+.paper-rip-top, .paper-rip-bottom {
     position: absolute;
     left: 0;
     width: 100%;
@@ -627,7 +624,6 @@ ul {
     z-index: 10;
     pointer-events: none;
 }
-/* We simulate a torn edge using a repeating radial gradient */
 .paper-rip-top {
     top: -15px;
     background: radial-gradient(circle at 10px 0, transparent 10px, var(--bg-color-main) 11px);
@@ -641,6 +637,11 @@ ul {
     background-size: 20px 20px;
     background-position: 0 -5px;
     background-repeat: repeat-x;
+}
+
+/* paper-texture-top/bottom in the hero: completamente ocultos, sin borde ni fondo */
+.paper-texture-top, .paper-texture-bottom {
+    display: none !important;
 }
 
 .countdown-section {
@@ -731,12 +732,7 @@ ul {
         margin: 0 auto;
     }
 
-    .hero-section {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+    /* hero-section height manejada por su propio @media (max-width:768px) block arriba */
 
     /* Placa esmerilada — compacta y no aplasta el video en móvil */
     .hero-content {
