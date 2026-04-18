@@ -526,32 +526,32 @@ ul {
 }
 
 .hero-content {
-    background: rgba(255, 255, 255, 0.4); 
-    backdrop-filter: blur(18px); /* Even stronger blur */
-    -webkit-backdrop-filter: blur(18px);
-    padding: 30px 25px;
-    border-radius: 35px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.38);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 22px 28px;
+    border-radius: 28px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
     z-index: 10;
-    width: 90%;
-    max-width: 550px;
-    margin: 15px;
-    border: 1px solid rgba(255,255,255,0.5);
+    width: fit-content;
+    max-width: 420px;
+    margin: 15px auto;
+    border: 1px solid rgba(255,255,255,0.55);
     text-align: center;
 }
 
 /* Desktop refinements */
 @media (min-width: 992px) {
     .hero-content {
-        padding: 50px 60px;
-        max-width: 600px;
+        padding: 32px 48px;
+        max-width: 460px;
         margin: 0 auto;
-        min-height: auto;
         display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(255,255,255,0.8);
+        background: rgba(255, 255, 255, 0.55);
+        border: 1px solid rgba(255,255,255,0.75);
     }
 }
 
@@ -722,9 +722,9 @@ ul {
 }
 
 @media (max-width: 768px) {
-    .names { font-size: 2.2rem; } /* Aggressively smaller */
+    .names { font-size: 2rem; }
     
-    .footer-names h3 { font-size: 2.22rem; }
+    .footer-names h3 { font-size: 2.1rem; }
     
     .rsvp-custom-btn {
         max-width: 90% !important;
@@ -732,18 +732,33 @@ ul {
     }
 
     .hero-section {
-        min-height: 80vh;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
 
+    /* Placa esmerilada — compacta y no aplasta el video en móvil */
     .hero-content {
-        width: 90%;
+        width: auto;
+        max-width: 85vw;
         margin: 0 auto;
-        padding: 30px 15px;
+        padding: 18px 20px;
+        border-radius: 22px;
         position: relative;
         z-index: 10;
+    }
+
+    /* Título más pequeño en placa */
+    .hero-content .subtitle {
+        font-size: 0.75rem;
+        margin-top: 0;
+        letter-spacing: 2px;
+    }
+
+    .hero-content .date-txt {
+        font-size: 0.9rem;
+        margin-top: 4px;
     }
 
     .corner-img {
@@ -763,13 +778,13 @@ ul {
 
     /* SPECIFIC MOBILE FIXES FOR QR AND VISOR */
     .qr-container-wrapper {
-        max-width: 180px !important; /* Forces mobile-only small size */
+        max-width: 180px !important;
         padding: 15px !important;
         margin: 0 auto;
     }
 
     .photo-gallery-latest {
-        max-width: 100% !important; /* Full width on mobile */
+        max-width: 100% !important;
         width: calc(100% - 30px) !important;
         margin: 0 auto;
     }
@@ -822,24 +837,32 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     color: var(--primary-color);
+    margin-top: 8px;
 }
 
 .date-highlight .day {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-family: var(--font-head);
     line-height: 1;
 }
 
 .date-highlight .month-year {
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-align: left;
     line-height: 1.2;
     border-left: 2px solid var(--primary-color);
-    padding-left: 15px;
+    padding-left: 12px;
+}
+
+/* Fecha más compacta en móvil */
+@media (max-width: 768px) {
+    .date-highlight .day { font-size: 2.4rem; }
+    .date-highlight .month-year { font-size: 0.8rem; letter-spacing: 1.5px; padding-left: 10px; }
+    .date-highlight { gap: 10px; margin-top: 6px; }
 }
 
 /* SECTION TITLES */
