@@ -796,6 +796,28 @@ ul {
     font-size: 1.1rem;
 }
 
+.empty-gallery {
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px dashed rgba(85, 107, 47, 0.3);
+    border-radius: 20px;
+    color: var(--text-light);
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+.empty-gallery i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.text-error {
+    color: #ff4d4d;
+    font-weight: 600;
+}
+
 .date-highlight {
     display: flex;
     align-items: center;

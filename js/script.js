@@ -608,10 +608,43 @@ if (calendarBtn && calendarOptions) {
     });
 }
 
-// PHOTO UPLOAD & GLOBAL GALLERY (CLOUDINARY)
-const CLOUD_NAME = 'dkozw2kmy';
-const UPLOAD_PRESET = 'unsigned_boda';
-const PHOTO_TAG = 'boda-fotos';
+// PHOTO UPLOAD & GLOBAL GALLERY (SUPABASE)
+const SUPABASE_URL = 'https://fhnnqmbbeeobassvfeox.supabase.co';
+// IMPORTANTE: Si la subida falla, verifica que esta sea la clave 'anon public' de:
+// Supabase Dashboard > Settings > API > Project API keys > anon public
+const SUPABASE_ANON_KEY = 'sb_publishable_JV54Q8BDmg5XDXsq7NwO6Q_YDPBOLrm';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const BUCKET_NAME = 'fotos-album';
+const ALBUM_ID = 'boda-demo'; // Centralized ID for multi-album support
+
+// Sanitizar nombre de archivo: elimina espacios, acentos y caracteres especiales
+function sanitizeFileName(name) {
+    return name
+        .normalize('NFD')                          // descomponer acentos
+        .replace(/[\u0300-\u036f]/g, '')           // quitar marcas diacríticas
+        .replace(/[^a-zA-Z0-9._-]/g, '_')         // reemplazar caracteres inválidos
+        .replace(/_+/g, '_')                       // múltiples guiones bajos → uno
+        .toLowerCase();
+}
+
+// Mostrar error visible en UI (reemplaza el alert ruidoso)
+function showUploadError(message) {
+    const statusEl = document.getElementById('upload-status');
+    const cameraBtn = document.getElementById('btn-camera');
+    if (statusEl) statusEl.style.display = 'none';
+    if (cameraBtn) cameraBtn.style.display = 'flex';
+    
+    // Mostrar error temporal en la galería si existe
+    const galleryEl = document.getElementById('photo-gallery');
+    if (galleryEl) {
+        const errDiv = document.createElement('div');
+        errDiv.className = 'upload-error-msg';
+        errDiv.innerHTML = `<i class='bx bx-error-circle'></i> <span>${message}</span>`;
+        errDiv.style.cssText = 'color:#e74c3c;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:10px;padding:12px 16px;margin:10px 0;display:flex;align-items:center;gap:8px;font-size:0.9rem;';
+        galleryEl.insertAdjacentElement('beforebegin', errDiv);
+        setTimeout(() => errDiv.remove(), 5000);
+    }
+}
 
 const btnCamera = document.getElementById('btn-camera');
 const photoInput = document.getElementById('photo-input');
@@ -619,26 +652,46 @@ const uploadStatus = document.getElementById('upload-status');
 const uploadSuccess = document.getElementById('upload-success');
 const photoGallery = document.getElementById('photo-gallery');
 
-async function fetchCloudinaryGallery() {
+async function fetchSupabaseGallery() {
+    console.log('Cargando galería desde Supabase para el álbum:', ALBUM_ID);
     try {
-        const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${PHOTO_TAG}.json?t=${Date.now()}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        renderCloudinaryGallery(data.resources);
-    } catch (err) { console.error('Error fetching gallery:', err); }
+        const { data: resources, error } = await supabaseClient
+            .from('fotos')
+            .select('*')
+            .eq('album_id', ALBUM_ID)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error de Supabase al obtener fotos:', error);
+            throw error;
+        }
+        
+        console.log('Fotos obtenidas:', resources ? resources.length : 0);
+        renderSupabaseGallery(resources);
+    } catch (err) { 
+        console.error('Error crítico al cargar galería:', err);
+        if (photoGallery) photoGallery.innerHTML = '<p class="text-error">Error al conectar con la galería.</p>';
+    }
 }
 
-function renderCloudinaryGallery(resources) {
-    if (!photoGallery || !resources || resources.length === 0) {
-        if (photoGallery) photoGallery.innerHTML = '';
+function renderSupabaseGallery(resources) {
+    if (!photoGallery) return;
+    
+    if (!resources || resources.length === 0) {
+        photoGallery.innerHTML = `
+            <div class="empty-gallery">
+                <i class='bx bx-camera-off'></i>
+                <p>Aún no hay fotos en este álbum.<br>¡Sé el primero en compartir un recuerdo!</p>
+            </div>
+        `;
         return;
     }
-    resources.sort((a, b) => b.version - a.version);
+    
     let html = '';
     
-    // Feature the latest photo as the "visor" entry
+    // Feature the latest photo
     const latest = resources[0];
-    const latestUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1200,q_auto,f_auto/v${latest.version}/${latest.public_id}.${latest.format}`;
+    const latestUrl = latest.url;
     
     html += `
         <div class="photo-gallery-latest reveal active">
@@ -649,12 +702,11 @@ function renderCloudinaryGallery(resources) {
 
     if (resources.length > 1) {
         html += '<div class="photo-gallery-grid reveal active">';
-        const limit = Math.min(resources.length, 13); // Show more thumbnails
+        const limit = Math.min(resources.length, 13);
         for (let i = 1; i < limit; i++) {
             const r = resources[i];
-            const fullUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1200,q_auto,f_auto/v${r.version}/${r.public_id}.${r.format}`;
-            const thumbUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_300,h_300,c_fill,q_auto,f_auto/v${r.version}/${r.public_id}.${r.format}`;
-            html += `<img src="${thumbUrl}" alt="Foto del evento" onclick="openVisor('${fullUrl}')" style="cursor: pointer;">`;
+            const fullUrl = r.url;
+            html += `<img src="${fullUrl}" alt="Foto del evento" onclick="openVisor('${fullUrl}')" style="cursor: pointer;">`;
         }
         html += '</div>';
     }
@@ -688,7 +740,7 @@ window.addEventListener('click', (event) => {
     }
 });
 
-fetchCloudinaryGallery();
+fetchSupabaseGallery();
 
 if (btnCamera) {
     btnCamera.addEventListener('click', () => photoInput.click());
@@ -696,21 +748,60 @@ if (btnCamera) {
 
 if (photoInput) {
     photoInput.addEventListener('change', async function(e) {
-        var file = e.target.files[0];
+        const file = e.target.files[0];
         if (!file) return;
+
         btnCamera.style.display = 'none';
         uploadStatus.style.display = 'flex';
-        var formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', UPLOAD_PRESET);
-        formData.append('folder', 'boda-carolina-daniel');
-        formData.append('tags', PHOTO_TAG);
+
         try {
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
-            if (!res.ok) throw new Error('Upload failed');
+            // 1. Upload to Supabase Storage — nombre sanitizado
+            const safeFileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
+            console.log('Subiendo archivo:', safeFileName, 'Tamaño:', file.size, 'bytes');
+
+            const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                .from(BUCKET_NAME)
+                .upload(safeFileName, file, { cacheControl: '3600', upsert: false });
+
+            if (uploadError) {
+                console.error('Error de Storage:', uploadError);
+                // Diagnóstico específico por tipo de error
+                if (uploadError.message && uploadError.message.includes('security policy')) {
+                    throw new Error('Sin permiso para subir. El bucket necesita políticas RLS de INSERT para el rol anon.');
+                } else if (uploadError.message && uploadError.message.includes('Bucket not found')) {
+                    throw new Error(`El bucket "${BUCKET_NAME}" no existe en Supabase Storage.`);
+                } else if (uploadError.statusCode === '401' || uploadError.status === 401) {
+                    throw new Error('API Key inválida. Verifica la clave anon en Supabase Dashboard > Settings > API.');
+                }
+                throw uploadError;
+            }
+
+            // 2. Get Public URL
+            const { data: urlData } = supabaseClient.storage
+                .from(BUCKET_NAME)
+                .getPublicUrl(safeFileName);
+            
+            const publicUrl = urlData.publicUrl;
+            console.log('URL pública obtenida:', publicUrl);
+
+            // 3. Insert into Table
+            const { error: dbError } = await supabaseClient
+                .from('fotos')
+                .insert([{ url: publicUrl, album_id: ALBUM_ID }]);
+
+            if (dbError) {
+                console.error('Error de base de datos:', dbError);
+                if (dbError.message && dbError.message.includes('security policy')) {
+                    throw new Error('Sin permiso para guardar en la tabla fotos. Revisa las políticas RLS de la tabla.');
+                }
+                throw dbError;
+            }
+
             uploadStatus.style.display = 'none';
             uploadSuccess.style.display = 'flex';
-            setTimeout(() => { fetchCloudinaryGallery(); }, 1500);
+            console.log('✅ Foto subida correctamente:', publicUrl);
+            
+            setTimeout(() => { fetchSupabaseGallery(); }, 1500);
             setTimeout(function() {
                 uploadSuccess.style.display = 'none';
                 btnCamera.style.display = 'flex';
@@ -721,7 +812,8 @@ if (photoInput) {
             uploadStatus.style.display = 'none';
             btnCamera.style.display = 'flex';
             photoInput.value = '';
-            alert('Error al subir la foto.');
+            const errorMsg = err.message || 'Error desconocido al subir la foto.';
+            showUploadError(errorMsg);
         }
     });
 }
@@ -801,10 +893,22 @@ function handleUrlActions() {
     }
 }
 
+// REAL-TIME SUBSCRIPTION
+function initRealtimeSubscription() {
+    supabaseClient
+        .channel('public:fotos')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'fotos', filter: `album_id=eq.${ALBUM_ID}` }, (payload) => {
+            console.log('Nueva foto recibida en tiempo real:', payload.new);
+            fetchSupabaseGallery();
+        })
+        .subscribe();
+}
+
 // Initialize on Load
 window.addEventListener('load', () => {
     initQRCode();
     handleUrlActions();
+    initRealtimeSubscription();
 });
 
 // Horizontal Background Drift on Scroll
