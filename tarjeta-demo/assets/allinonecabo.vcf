@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Christian Garcia
+N:Garcia;Christian;;;
+ORG:All In One Cabo
+TITLE:Owner
+TEL;TYPE=WORK,VOICE:+52 624 137 8636
+TEL;TYPE=CELL,VOICE:+52 624 137 8636
+EMAIL;TYPE=INTERNET:allinonecabo@hotmail.com
+URL:https://allin1cabo.com
+ADR;TYPE=WORK:;;Cabo San Lucas;Los Cabos;Baja California Sur;Mexico
+NOTE:All In One Cabo - Tours & Activities
+END:VCARD
