@@ -2455,27 +2455,36 @@ section {
         margin: 0 auto !important;
     }
     .gift-card {
-        margin: 0 auto !important;
+        margin: 20px auto !important;
+        width: 95% !important;
+        max-width: 340px !important;
+        padding: 25px 15px !important;
+        text-align: center !important;
+    }
+    .gift-card h4 {
+        margin-bottom: 30px !important;
+        display: block !important;
         width: 100% !important;
-        max-width: 320px !important;
     }
     .store-links {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 20px !important;
+        gap: 15px !important;
         width: 100% !important;
+        margin-top: 10px !important;
     }
     .store-btn-logo {
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         min-width: unset !important;
-        width: 90% !important;
-        max-width: 280px !important;
-        height: 110px !important;
+        width: 100% !important;
+        max-width: 250px !important;
+        height: 90px !important;
         margin: 0 auto !important;
+        padding: 10px !important;
     }
 
     /* --- FOTOS --- */
