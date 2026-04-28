@@ -1295,16 +1295,22 @@ ul {
 }
 
 .gift-logo {
-    width: 100%;
-    height: 100%;
-    max-height: 80px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+    background: white;
+    padding: 10px;
+    transition: var(--transition);
     object-fit: contain;
     filter: brightness(0.95);
-    transition: filter 0.3s ease;
 }
 
-.store-btn-logo:hover .gift-logo {
+.gift-logo:hover {
     filter: brightness(1.05);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 @keyframes pulseLogo {
@@ -1814,8 +1820,6 @@ html, body {
     }
 }
 
-.timeline-item.active .timeline-dot {
-    background: var(--accent-color);
     box-shadow: 0 0 20px var(--accent-color);
     transform: translateX(-50%) scale(1.5);
 }
@@ -1849,22 +1853,7 @@ html, body {
     display: block;
 }
 
-@media (max-width: 768px) {
-    .timeline::before {
-        left: 30px;
-    }
-    .timeline-dot {
-        left: 30px;
-    }
-    .timeline-content {
-        width: calc(100% - 70px);
-        margin-left: 70px !important;
-        text-align: left !important;
-    }
-    .timeline-item:nth-child(odd) .timeline-content {
-        transform: translateX(50px);
-    }
-}
+
 
 /* MENUS SECTION ======================================== */
 .menus-section {
@@ -2460,7 +2449,15 @@ section {
 
     /* --- MESA DE REGALOS --- */
     .gift-options {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+    }
+    .gift-card {
+        margin: 0 auto !important;
+        width: 100% !important;
+        max-width: 320px !important;
     }
     .store-links {
         display: flex !important;
@@ -2468,15 +2465,16 @@ section {
         align-items: center !important;
         justify-content: center !important;
         gap: 20px !important;
+        width: 100% !important;
     }
     .store-btn-logo {
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        min-width: unset;
-        width: 100%;
-        max-width: 280px;
-        height: 100px;
+        min-width: unset !important;
+        width: 90% !important;
+        max-width: 280px !important;
+        height: 110px !important;
         margin: 0 auto !important;
     }
 
