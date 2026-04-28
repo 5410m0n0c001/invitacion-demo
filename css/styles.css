@@ -2487,6 +2487,7 @@ section {
         line-height: 1.5;
         max-width: 100%;
         margin-bottom: 20px;
+        color: white !important;
     }
     .footer-names h3 {
         font-size: 1.8rem;
@@ -2494,6 +2495,8 @@ section {
     }
     .footer-names p {
         font-size: 0.85rem !important;
+        color: white !important;
+        opacity: 0.9;
     }
     .footer-coordination {
         margin: 30px auto 0 !important;
