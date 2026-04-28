@@ -1,7 +1,6 @@
 // ENVELOPE VIDEO ANIMATION
 const envelopeScreen = document.getElementById('envelope-screen');
 const envelopeVideo = document.getElementById('envelope-video');
-const envelopeHint = document.querySelector('.envelope-hint');
 
 // Force first frame rendering
 if (envelopeVideo) {
@@ -15,9 +14,6 @@ const handleEnvelopeClick = () => {
         // Prevent multiple clicks
         if (!envelopeVideo.paused) return;
 
-        // Hide hint
-        if (envelopeHint) envelopeHint.style.display = 'none';
-        
         // Ensure video is at start and play
         envelopeVideo.currentTime = 0;
         envelopeVideo.play().then(() => {
@@ -168,15 +164,6 @@ function startGuidedTour() {
                 }
             },
             {
-                element: '#clima',
-                popover: {
-                    title: 'Pronóstico del Tiempo',
-                    description: 'Haz clic en el botón para ver el <b>mapa interactivo de Windy</b> en pantalla completa y conocer el pronóstico exacto.',
-                    side: window.innerWidth < 768 ? "bottom" : "top",
-                    align: 'center'
-                }
-            },
-            {
                 element: '#itinerario',
                 popover: {
                     title: 'Minuto a Minuto',
@@ -198,7 +185,7 @@ function startGuidedTour() {
                 element: 'a[href="mapa.html"]',
                 popover: {
                     title: 'Ubica tu Mesa',
-                    description: 'Este botón te llevará a un modelo 3D de la locación que te permitirá ubicar tu mesa y cada área destinada para cada momento.',
+                    description: 'Este botón te llevará a un modelo 3D de la locación que te permitirá ubicar tu mesa y cada área del evento.',
                     side: window.innerWidth < 768 ? "bottom" : "top",
                     align: 'center'
                 }
@@ -263,6 +250,15 @@ function startGuidedTour() {
                     title: 'Compartir QR',
                     description: 'Permite que otros invitados colaboren subiendo sus fotos escaneando este código.',
                     side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#clima',
+                popover: {
+                    title: 'Pronóstico del Tiempo',
+                    description: 'Haz clic para ver el <b>mapa interactivo de Windy</b> con el clima exacto en Temixco, Morelos el día del evento.',
+                    side: window.innerWidth < 768 ? "bottom" : "top",
                     align: 'center'
                 }
             },
@@ -364,77 +360,31 @@ revealElements.forEach(el => {
     revealObserver.observe(el);
 });
 
-// COUNTDOWN TIMER (1-minute demo mode)
-let countdownTime = 60; // 60 seconds
-const countdownContainer = document.querySelector('.countdown-container');
-const celebrationSound = document.getElementById('celebration-sound');
-const balloonsContainer = document.getElementById('balloons-container');
+// COUNTDOWN TIMER (Event Date: Nov 15, 2026)
+const eventDate = new Date('Nov 15, 2026 16:00:00').getTime();
 
 function startCountdown() {
     const countdown = setInterval(() => {
-        countdownTime--;
-        
-        const minutes = Math.floor(countdownTime / 60);
-        const seconds = countdownTime % 60;
+        const now = new Date().getTime();
+        const distance = eventDate - now;
 
-        // Update DOM (showing as 00:00:mm:ss for consistency)
-        if (document.getElementById('days')) document.getElementById('days').innerText = "00";
-        if (document.getElementById('hours')) document.getElementById('hours').innerText = "00";
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Update DOM
+        if (document.getElementById('days')) document.getElementById('days').innerText = days.toString().padStart(2, '0');
+        if (document.getElementById('hours')) document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
         if (document.getElementById('minutes')) document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
         if (document.getElementById('seconds')) document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
 
-        if (countdownTime <= 0) {
+        if (distance < 0) {
             clearInterval(countdown);
+            const countdownContainer = document.querySelector('.countdown-container');
             if (countdownContainer) countdownContainer.innerHTML = "<h3>¡El Gran Día ha llegado!</h3>";
-            triggerCelebration();
         }
     }, 1000);
-}
-// Sound loop counter
-let soundPlayCount = 0;
-const maxSoundPlays = 4;
-
-let isCelebrating = false;
-function triggerCelebration() {
-    if (isCelebrating) return;
-    isCelebrating = true;
-    
-    // Clear and reset to ensure exactly 3 balloons
-    if (balloonsContainer) balloonsContainer.innerHTML = '';
-    
-    if (celebrationSound && soundPlayCount < maxSoundPlays) {
-        celebrationSound.play()
-            .then(() => {
-                soundPlayCount++;
-                celebrationSound.onended = () => {
-                    if (soundPlayCount < maxSoundPlays) {
-                        celebrationSound.play();
-                        soundPlayCount++;
-                    }
-                };
-            })
-            .catch(e => console.log('Audio error:', e));
-    }
-    
-    if (balloonsContainer) {
-        balloonsContainer.style.display = 'block';
-        balloonsContainer.classList.add('active');
-        spawnBalloons();
-    }
-}
-
-function spawnBalloons() {
-    // Strictly 3 balloons for a clean, premium look, moving ONLY UPward
-    if (!balloonsContainer) return;
-    balloonsContainer.innerHTML = '';
-    for (let i = 0; i < 3; i++) {
-        setTimeout(() => {
-            const balloon = document.createElement('img');
-            balloon.src = 'globos.png';
-            balloon.className = 'balloon-img';
-            balloonsContainer.appendChild(balloon);
-        }, i * 3000); // 3-second stagger for a majestic ascending loop
-    }
 }
 
 // FLOATING NAV ACTIVE STATE (Optimized with IntersectionObserver)

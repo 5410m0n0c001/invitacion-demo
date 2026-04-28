@@ -181,31 +181,7 @@ ul {
     /* Removed opacity: 0 to show first frame immediately */
 }
 
-.envelope-hint {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: var(--font-head);
-    font-size: 1.2rem;
-    color: #fff;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    z-index: 10;
-    pointer-events: none;
-    animation: hintPulse 2s ease-in-out infinite;
-}
-
-@keyframes hintPulse {
-    0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
-    50% { opacity: 0.4; transform: translateX(-50%) scale(0.95); }
-}
-
 @media (max-width: 768px) {
-    .envelope-hint {
-        font-size: 0.9rem;
-    }
     .envelope-video {
         /* On mobile, ensure the video covers the vertical space */
         height: 100%;
@@ -559,62 +535,150 @@ ul {
     position: absolute;
     z-index: 15;
     pointer-events: none;
-    width: 180px;
+    width: 250px;
     height: auto;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+    transition: var(--transition);
 }
 
 .corner-top-left {
-    top: 0;
-    left: 0;
+    top: -40px;
+    left: -40px;
+    transform: rotate(-10deg);
 }
 
 .corner-bottom-right {
-    bottom: 0;
-    right: 0;
-    transform: scaleX(-1);
+    bottom: -40px;
+    right: -40px;
+    transform: scaleX(-1) rotate(-10deg);
 }
 
 /* Corner entrance animations */
 .animate-corner-tl {
-    animation: slideInTopLeft 1.2s cubic-bezier(0.25, 0.8, 0.25, 1) 0.5s both,
-               floatCorner 4s ease-in-out 1.7s infinite;
+    animation: slideInTopLeft 1.5s cubic-bezier(0.25, 0.8, 0.25, 1) 0.5s both,
+               floatCorner 6s ease-in-out 2s infinite;
 }
 
 .animate-corner-br {
-    animation: slideInBottomRight 1.2s cubic-bezier(0.25, 0.8, 0.25, 1) 0.8s both,
-               floatCornerReverse 4s ease-in-out 2s infinite;
+    animation: slideInBottomRight 1.5s cubic-bezier(0.25, 0.8, 0.25, 1) 0.8s both,
+               floatCornerReverse 6s ease-in-out 2.3s infinite;
 }
 
 @keyframes slideInTopLeft {
     0% {
         opacity: 0;
-        transform: translate(-60px, -60px) scale(0.5);
+        transform: translate(-100px, -100px) scale(0.8) rotate(-15deg);
     }
     100% {
         opacity: 1;
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0) scale(1) rotate(-5deg);
     }
 }
 
 @keyframes slideInBottomRight {
     0% {
         opacity: 0;
-        transform: translate(60px, 60px) scale(0.5) scaleX(-1);
+        transform: translate(100px, 100px) scale(0.8) scaleX(-1) rotate(-15deg);
     }
     100% {
         opacity: 1;
-        transform: translate(0, 0) scale(1) scaleX(-1);
+        transform: translate(0, 0) scale(1) scaleX(-1) rotate(-5deg);
     }
 }
 
 @keyframes floatCorner {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(3px, 3px) scale(1.02); }
+    0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+    50% { transform: translate(8px, 8px) rotate(-2deg); }
 }
 
 @keyframes floatCornerReverse {
-    0%, 100% { transform: translate(0, 0) scale(1) scaleX(-1); }
-    50% { transform: translate(-3px, -3px) scale(1.02) scaleX(-1); }
+    0%, 100% { transform: translate(0, 0) scaleX(-1) rotate(-5deg); }
+    50% { transform: translate(-8px, -8px) scaleX(-1) rotate(-2deg); }
+}
+
+/* Unified Location Card */
+.unified-location-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 50px 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    max-width: 950px;
+    margin: 40px auto 0;
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+.pin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.main-location-pin {
+    width: 140px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.location-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+}
+
+.location-col {
+    flex: 1;
+    padding: 0 25px;
+}
+
+.location-divider {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(85, 107, 47, 0.2), transparent);
+    align-self: stretch;
+}
+
+.btn-location-link {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 15px;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(85, 107, 47, 0.2);
+}
+
+.btn-location-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(85, 107, 47, 0.3);
+    background: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    .location-grid {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .location-divider {
+        width: 60%;
+        height: 1px;
+        margin: 10px auto;
+        background: linear-gradient(to right, transparent, rgba(85, 107, 47, 0.2), transparent);
+    }
+    .unified-location-card {
+        padding: 40px 20px;
+        border-radius: 40px;
+    }
+    .main-location-pin {
+        width: 100px;
+    }
 }
 
 /* Torn paper effect placeholders (using SVG backgrounds generally, but using borders for simplicity first) */
@@ -746,8 +810,18 @@ ul {
     }
 
     .corner-img {
-        width: 50px;
-        opacity: 0.7;
+        width: 100px;
+        opacity: 0.9;
+    }
+    
+    .corner-top-left {
+        top: -10px;
+        left: -10px;
+    }
+    
+    .corner-bottom-right {
+        bottom: -10px;
+        right: -10px;
     }
 
     .dresscode-icon-img {

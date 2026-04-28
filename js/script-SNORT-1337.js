@@ -1,7 +1,6 @@
 // ENVELOPE VIDEO ANIMATION
 const envelopeScreen = document.getElementById('envelope-screen');
 const envelopeVideo = document.getElementById('envelope-video');
-const envelopeHint = document.querySelector('.envelope-hint');
 
 // Force first frame rendering
 if (envelopeVideo) {
@@ -15,9 +14,6 @@ const handleEnvelopeClick = () => {
         // Prevent multiple clicks
         if (!envelopeVideo.paused) return;
 
-        // Hide hint
-        if (envelopeHint) envelopeHint.style.display = 'none';
-        
         // Ensure video is at start and play
         envelopeVideo.currentTime = 0;
         envelopeVideo.play().then(() => {
