@@ -5,24 +5,25 @@ const envelopeVideo = document.getElementById('envelope-video');
 // No forzamos currentTime para evitar bugs de rendering en Edge/Safari
 // El pre-load nativo del navegador se encargará del primer cuadro.
 
+let isEnvelopeOpening = false; // Máquina de estados estricta anti-doble clic
+
 const handleEnvelopeClick = () => {
+    if (isEnvelopeOpening) return; // Bloqueo absoluto si ya está procesando
+    isEnvelopeOpening = true;
+
+    if (envelopeScreen) {
+        envelopeScreen.classList.add('is-processing'); // Feedback visual inmediato (CSS)
+    }
+
     if (envelopeVideo) {
-        if (!envelopeVideo.paused) return; // Prevent multiple clicks
-
-        const heroVideo = document.querySelector('.hero-video');
-        if (heroVideo && heroVideo.paused) {
-            heroVideo.play().catch(e => console.log("Hero video autoplay ignorado", e));
-        }
-
-        // Iniciar sobre
+        // En móviles muy estrictos, si el video estaba pausado, lo iniciamos
         const playPromise = envelopeVideo.play();
         
-        // Timeout de seguridad: Si el video se congela o falla y no dispara 'onended'
-        // después de 4 segundos (el video dura aprox 3s), forzamos la salida.
+        // Timeout de seguridad extremo: Si falla silenciosamente
         let isOpened = false;
         const safetyFallback = setTimeout(() => {
             if (!isOpened) {
-                console.warn('Fallback de seguridad activado: El video del sobre se atascó.');
+                console.warn('Fallback: Sobre atascado, forzando apertura.');
                 envelopeScreen.classList.add('hidden');
                 setTimeout(() => { envelopeScreen.style.display = 'none'; startPostEnvelopeActions(); }, 800);
                 isOpened = true;
@@ -31,7 +32,7 @@ const handleEnvelopeClick = () => {
 
         if (playPromise !== undefined) {
             playPromise.catch(e => {
-                console.error('El navegador bloqueó la animación del sobre:', e);
+                console.error('Navegador bloqueó el sobre:', e);
                 if (!isOpened) {
                     clearTimeout(safetyFallback);
                     envelopeScreen.classList.add('hidden');
@@ -50,6 +51,10 @@ const handleEnvelopeClick = () => {
                 isOpened = true;
             }
         };
+    } else {
+        // Fallback si no hay video del sobre
+        envelopeScreen.classList.add('hidden');
+        setTimeout(() => { envelopeScreen.style.display = 'none'; startPostEnvelopeActions(); }, 800);
     }
 };
 
@@ -58,9 +63,15 @@ function startPostEnvelopeActions() {
     startCountdown();
     document.body.classList.add('ui-visible');
 
+    const heroVideo = document.querySelector('.hero-video');
     const bgMusic = document.getElementById('bg-music');
     const audioBtn = document.getElementById('audio-btn');
     const bgMusicVideo = document.getElementById('audio-btn-video');
+
+    // Secuenciación: Ahora que el sobre ya no asfixia la memoria, arrancamos la portada
+    if (heroVideo) {
+        heroVideo.play().catch(e => console.log('Hero video autoplay diferido falló:', e));
+    }
 
     if (bgMusic && audioBtn) {
         bgMusic.play().then(() => {
@@ -71,6 +82,8 @@ function startPostEnvelopeActions() {
 
     setTimeout(() => {
         if (envelopeScreen) envelopeScreen.style.display = 'none';
+        
+        // Start Guided Tour after card is visible
         startGuidedTour();
     }, 900);
 }

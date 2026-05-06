@@ -171,6 +171,12 @@ ul {
     filter: brightness(0.85); /* Feedback inmediato al tocar el sobre */
 }
 
+/* Estado de procesamiento: Evita que el usuario siga haciendo clics pensando que falló */
+.envelope-screen.is-processing {
+    filter: brightness(0.7);
+    pointer-events: none; /* Bloquea clics extra físicamente a nivel CSS */
+}
+
 .envelope-screen.hidden {
     opacity: 0;
     visibility: hidden;
