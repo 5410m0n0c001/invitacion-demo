@@ -9,9 +9,10 @@ const handleEnvelopeClick = () => {
     if (envelopeVideo) {
         if (!envelopeVideo.paused) return; // Prevent multiple clicks
 
-        // Hemos removido la reproducción simultánea de heroVideo y bgMusicVideo
-        // porque en Edge/Safari móvil, intentar arrancar 3 videos al mismo tiempo
-        // sobrecarga el decodificador de hardware y causa que se congele el principal.
+        const heroVideo = document.querySelector('.hero-video');
+        if (heroVideo && heroVideo.paused) {
+            heroVideo.play().catch(e => console.log("Hero video autoplay ignorado", e));
+        }
 
         // Iniciar sobre
         const playPromise = envelopeVideo.play();
