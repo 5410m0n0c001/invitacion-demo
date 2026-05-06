@@ -15,11 +15,29 @@ const handleEnvelopeClick = () => {
         envelopeScreen.classList.add('is-processing'); // Feedback visual inmediato (CSS)
     }
 
+    // EL PATRÓN DE "UNLOCK" (Desbloqueo de Media):
+    // Para que los navegadores móviles permitan que la portada se reproduzca automáticamente DESPUÉS,
+    // debemos "autorizar" el elemento de video dentro de esta interacción de clic síncrona.
+    const heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) {
+        // Al llamar a play() y seguido pause(), le decimos al navegador "el usuario interactuó con este video".
+        // Sin embargo, como pausamos al instante, evitamos ahogar el decodificador de hardware.
+        const unlockPromise = heroVideo.play();
+        if (unlockPromise !== undefined) {
+            unlockPromise.then(() => {
+                heroVideo.pause();
+                heroVideo.currentTime = 0; // Lo reiniciamos por si acaso
+            }).catch(e => {
+                // Ignorar error de unlock silenciosamente
+            });
+        }
+    }
+
     if (envelopeVideo) {
-        // En móviles muy estrictos, si el video estaba pausado, lo iniciamos
+        // Arrancamos el sobre, el cual tiene ahora el 100% de la capacidad de hardware
         const playPromise = envelopeVideo.play();
         
-        // Timeout de seguridad extremo: Si falla silenciosamente
+        // Timeout de seguridad extremo
         let isOpened = false;
         const safetyFallback = setTimeout(() => {
             if (!isOpened) {
@@ -63,22 +81,15 @@ function startPostEnvelopeActions() {
     startCountdown();
     document.body.classList.add('ui-visible');
 
-    const heroContainer = document.getElementById('hero-video-container');
+    const heroVideo = document.querySelector('.hero-video');
     const bgMusic = document.getElementById('bg-music');
     const audioBtn = document.getElementById('audio-btn');
     const bgMusicVideo = document.getElementById('audio-btn-video');
 
-    // Inyección dinámica de la portada:
-    // Al inyectar el video nativamente con atributos "autoplay muted playsinline" 
-    // DESPUÉS de abrir el sobre, eludimos la restricción de interacción requerida 
-    // porque los navegadores móviles permiten el autoplay silenciado de elementos nuevos,
-    // y además esto nos garantiza que el hardware del celular no compitió procesando dos videos a la vez al cargar la página.
-    if (heroContainer && !document.getElementById('dynamic-hero-video')) {
-        heroContainer.innerHTML = `
-            <video id="dynamic-hero-video" class="hero-video" autoplay loop muted playsinline>
-                <source src="portada.mp4?v=2" type="video/mp4">
-            </video>
-        `;
+    // Ahora que el sobre ya cerró, el decodificador de hardware está libre.
+    // Como hicimos el "Unlock" en el clic inicial, el navegador permitirá reproducir esto sin importar la Visita Guiada.
+    if (heroVideo) {
+        heroVideo.play().catch(e => console.log('Hero video final play falló:', e));
     }
 
     if (bgMusic && audioBtn) {
@@ -136,7 +147,7 @@ function startGuidedTour() {
                 }
             },
             {
-                element: '#hero',
+                element: '.hero-content', // Cambiado de #hero a .hero-content para no alterar el z-index del video
                 popover: {
                     title: 'Portada',
                     description: 'Esta es la parte donde viene la información: los nombres de los novios, la fecha, y con el espacio para personalizar con el contenido que desees (foto, video, etc.).',

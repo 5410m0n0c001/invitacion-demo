@@ -4,7 +4,7 @@ const driverObj = driver({
     showProgress: true,
     steps: [
         {
-            element: '.hero',
+            element: '.hero-content',
             popover: {
                 title: 'Personalización Total',
                 description: 'Esta portada es <b>100% personalizable</b>. Podemos colocar tu marca, logotipo animado, videos exclusivos y álbumes de fotos para impactar desde el primer segundo.',
