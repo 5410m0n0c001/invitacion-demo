@@ -9,36 +9,45 @@ const handleEnvelopeClick = () => {
     if (envelopeVideo) {
         if (!envelopeVideo.paused) return; // Prevent multiple clicks
 
-        // ACCIÓN CLAVE PARA MÓVILES (Edge/Safari/Chrome):
-        // Al ocurrir un clic del usuario, debemos "desbloquear" todos los videos
-        // reproduciéndolos silenciosamente o preparándolos de inmediato.
-        const heroVideo = document.querySelector('.hero-video');
-        const bgMusicVideo = document.getElementById('audio-btn-video');
-        
-        if (heroVideo) {
-            heroVideo.play().catch(e => console.log("Hero video autoplay requires more interaction", e));
-        }
-        if (bgMusicVideo) {
-            bgMusicVideo.play().catch(e => console.log("Btn video autoplay blocked", e));
-        }
+        // Hemos removido la reproducción simultánea de heroVideo y bgMusicVideo
+        // porque en Edge/Safari móvil, intentar arrancar 3 videos al mismo tiempo
+        // sobrecarga el decodificador de hardware y causa que se congele el principal.
 
         // Iniciar sobre
         const playPromise = envelopeVideo.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log('Sobre animándose...');
-            }).catch(e => {
-                console.error('El navegador bloqueó la animación del sobre:', e);
-                // Si el video falla definitivamente, quitamos el sobre inmediatamente
+        
+        // Timeout de seguridad: Si el video se congela o falla y no dispara 'onended'
+        // después de 4 segundos (el video dura aprox 3s), forzamos la salida.
+        let isOpened = false;
+        const safetyFallback = setTimeout(() => {
+            if (!isOpened) {
+                console.warn('Fallback de seguridad activado: El video del sobre se atascó.');
                 envelopeScreen.classList.add('hidden');
                 setTimeout(() => { envelopeScreen.style.display = 'none'; startPostEnvelopeActions(); }, 800);
+                isOpened = true;
+            }
+        }, 4000);
+
+        if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                console.error('El navegador bloqueó la animación del sobre:', e);
+                if (!isOpened) {
+                    clearTimeout(safetyFallback);
+                    envelopeScreen.classList.add('hidden');
+                    setTimeout(() => { envelopeScreen.style.display = 'none'; startPostEnvelopeActions(); }, 800);
+                    isOpened = true;
+                }
             });
         }
         
         // Cuando el video del sobre termina normalmente
         envelopeVideo.onended = () => {
-            envelopeScreen.classList.add('hidden');
-            startPostEnvelopeActions();
+            if (!isOpened) {
+                clearTimeout(safetyFallback);
+                envelopeScreen.classList.add('hidden');
+                startPostEnvelopeActions();
+                isOpened = true;
+            }
         };
     }
 };
