@@ -104,11 +104,9 @@
 
 
             
-            <div class="hero-video-container reveal">
-                <!-- Video de portada (Sin autoplay para evitar asfixia del hardware) -->
-                <video class="hero-video" loop muted playsinline preload="auto">
-                    <source src="portada.mp4?v=2" type="video/mp4">
-                </video>
+            <div class="hero-video-container reveal" id="hero-video-container">
+                <!-- El video de portada se inyectará dinámicamente aquí después de abrir el sobre 
+                     para evitar que el celular bloquee el reproductor por exceso de procesos simultáneos -->
             </div>
 
         </section>

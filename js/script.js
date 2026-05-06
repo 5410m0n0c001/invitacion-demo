@@ -63,14 +63,22 @@ function startPostEnvelopeActions() {
     startCountdown();
     document.body.classList.add('ui-visible');
 
-    const heroVideo = document.querySelector('.hero-video');
+    const heroContainer = document.getElementById('hero-video-container');
     const bgMusic = document.getElementById('bg-music');
     const audioBtn = document.getElementById('audio-btn');
     const bgMusicVideo = document.getElementById('audio-btn-video');
 
-    // Secuenciación: Ahora que el sobre ya no asfixia la memoria, arrancamos la portada
-    if (heroVideo) {
-        heroVideo.play().catch(e => console.log('Hero video autoplay diferido falló:', e));
+    // Inyección dinámica de la portada:
+    // Al inyectar el video nativamente con atributos "autoplay muted playsinline" 
+    // DESPUÉS de abrir el sobre, eludimos la restricción de interacción requerida 
+    // porque los navegadores móviles permiten el autoplay silenciado de elementos nuevos,
+    // y además esto nos garantiza que el hardware del celular no compitió procesando dos videos a la vez al cargar la página.
+    if (heroContainer && !document.getElementById('dynamic-hero-video')) {
+        heroContainer.innerHTML = `
+            <video id="dynamic-hero-video" class="hero-video" autoplay loop muted playsinline>
+                <source src="portada.mp4?v=2" type="video/mp4">
+            </video>
+        `;
     }
 
     if (bgMusic && audioBtn) {
