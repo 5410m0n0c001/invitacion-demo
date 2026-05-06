@@ -157,15 +157,18 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000 url('../sobre.png') no-repeat center center;
-    background-size: cover;
+    background: #000; /* Removida la imagen para evitar problemas de superposicion con el video */
     z-index: 9999;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: opacity 1.5s ease, visibility 1.5s ease;
+    transition: opacity 0.8s ease, visibility 0.8s ease, filter 0.3s ease; /* Transiciones mas veloces */
+}
+
+.envelope-screen:active {
+    filter: brightness(0.85); /* Feedback inmediato al tocar el sobre */
 }
 
 .envelope-screen.hidden {
@@ -179,7 +182,7 @@ ul {
     height: 100%;
     object-fit: cover;
     pointer-events: none;
-    /* Removed opacity: 0 to show first frame immediately */
+    transition: opacity 0.3s ease;
 }
 
 @media (max-width: 768px) {

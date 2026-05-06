@@ -15,6 +15,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css?v=1.0.7">
+    <link rel="stylesheet" href="css/styles-premium.css">
     
     <!-- Driver.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
@@ -45,12 +46,15 @@
     <meta name="twitter:title" content="Carolina & Daniel - ¡Estás Invitado a Nuestra Boda!">
     <meta name="twitter:description" content="Acompáñanos a celebrar nuestro gran día el 15 de Noviembre de 2026.">
     <meta name="twitter:image" content="https://5410m0n0c001.github.io/invitacion-demo/mini.jpg">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="sobre.mp4?v=2" as="video" type="video/mp4">
 </head>
 <body>
 
     <!-- SOBRE DE CARTA - Pantalla de entrada -->
     <div class="envelope-screen" id="envelope-screen">
-        <video id="envelope-video" class="envelope-video" muted playsinline preload="auto" poster="sobre.png">
+        <video id="envelope-video" class="envelope-video" muted playsinline preload="auto">
             <source src="sobre.mp4?v=2" type="video/mp4">
         </video>
     </div>

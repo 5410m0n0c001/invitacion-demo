@@ -2,64 +2,68 @@
 const envelopeScreen = document.getElementById('envelope-screen');
 const envelopeVideo = document.getElementById('envelope-video');
 
-// Force first frame rendering
-if (envelopeVideo) {
-    envelopeVideo.addEventListener('loadedmetadata', () => {
-        envelopeVideo.currentTime = 0.1;
-    }, { once: true });
-}
+// No forzamos currentTime para evitar bugs de rendering en Edge/Safari
+// El pre-load nativo del navegador se encargará del primer cuadro.
 
 const handleEnvelopeClick = () => {
     if (envelopeVideo) {
-        // Prevent multiple clicks
-        if (!envelopeVideo.paused) return;
+        if (!envelopeVideo.paused) return; // Prevent multiple clicks
 
-        // Ensure video is at start and play
-        envelopeVideo.currentTime = 0;
-        envelopeVideo.play().then(() => {
-            console.log('Video playing...');
-        }).catch(e => {
-            console.log('Video play failed:', e);
-            // Fallback: just open if video fails
-            envelopeScreen.classList.add('hidden');
-            setTimeout(() => { envelopeScreen.style.display = 'none'; }, 1000);
-        });
+        // ACCIÓN CLAVE PARA MÓVILES (Edge/Safari/Chrome):
+        // Al ocurrir un clic del usuario, debemos "desbloquear" todos los videos
+        // reproduciéndolos silenciosamente o preparándolos de inmediato.
+        const heroVideo = document.querySelector('.hero-video');
+        const bgMusicVideo = document.getElementById('audio-btn-video');
         
-        // When video ends, fade out screen
+        if (heroVideo) {
+            heroVideo.play().catch(e => console.log("Hero video autoplay requires more interaction", e));
+        }
+        if (bgMusicVideo) {
+            bgMusicVideo.play().catch(e => console.log("Btn video autoplay blocked", e));
+        }
+
+        // Iniciar sobre
+        const playPromise = envelopeVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('Sobre animándose...');
+            }).catch(e => {
+                console.error('El navegador bloqueó la animación del sobre:', e);
+                // Si el video falla definitivamente, quitamos el sobre inmediatamente
+                envelopeScreen.classList.add('hidden');
+                setTimeout(() => { envelopeScreen.style.display = 'none'; startPostEnvelopeActions(); }, 800);
+            });
+        }
+        
+        // Cuando el video del sobre termina normalmente
         envelopeVideo.onended = () => {
             envelopeScreen.classList.add('hidden');
-            
-            // Start countdown only after opening
-            startCountdown();
-
-            // Start bg music
-            const bgMusic = document.getElementById('bg-music');
-            const audioBtn = document.getElementById('audio-btn');
-            const bgMusicVideo = document.getElementById('audio-btn-video');
-            
-            // Show UI elements (Nav and Audio button)
-            document.body.classList.add('ui-visible');
-
-            if (bgMusic && audioBtn) {
-                bgMusic.play().then(() => {
-                    audioBtn.classList.add('playing');
-                    if (bgMusicVideo) {
-                        bgMusicVideo.currentTime = 0;
-                        bgMusicVideo.play();
-                    }
-                }).catch(e => console.log('Audio autoplay blocked:', e));
-            }
-
-            // Remove from DOM after fade
-            setTimeout(() => {
-                envelopeScreen.style.display = 'none';
-                
-                // Start Guided Tour after card is visible
-                startGuidedTour();
-            }, 1600);
+            startPostEnvelopeActions();
         };
     }
 };
+
+// Función separada para limpiar el código y ejecutar cuando el sobre termina o falla
+function startPostEnvelopeActions() {
+    startCountdown();
+    document.body.classList.add('ui-visible');
+
+    const bgMusic = document.getElementById('bg-music');
+    const audioBtn = document.getElementById('audio-btn');
+    const bgMusicVideo = document.getElementById('audio-btn-video');
+
+    if (bgMusic && audioBtn) {
+        bgMusic.play().then(() => {
+            audioBtn.classList.add('playing');
+            if (bgMusicVideo && bgMusicVideo.paused) bgMusicVideo.play();
+        }).catch(e => console.log('Audio de fondo bloqueado:', e));
+    }
+
+    setTimeout(() => {
+        if (envelopeScreen) envelopeScreen.style.display = 'none';
+        startGuidedTour();
+    }, 900);
+}
 
 // GUIDED TOUR LOGIC (Driver.js)
 function startGuidedTour() {
